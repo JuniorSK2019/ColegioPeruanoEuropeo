@@ -125,34 +125,32 @@
       margin-left: 60px; 
     }
 
-@media (max-width: 768px) {
-  #intro .container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
+    @media (max-width: 768px) {
+      #intro .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
-  #intro .info-matricula img {
-    max-width: 70%;
-    margin-top: 0 !important; /* fuerza que no haya espacio */
-  }
+      #intro .info-matricula img {
+        max-width: 70%;
+        margin-top: 0 !important;
+      }
 
-  #intro .formulario {
-    margin-left: 0;
-    margin-top: 15px; /* pequeño espacio entre imagen y formulario */
-  }
-}
-
-
+      #intro .formulario {
+        margin-left: 0;
+        margin-top: 15px;
+      }
+    }
 
     /* Ajustes para subir el footer */
     #intro {
-      padding-bottom: 200px; /* evita que el contenido quede cortado */
+      padding-bottom: 200px;
     }
 
     #footer {
       position: relative;
-      margin-top: -150px; /* ajusta cuánto quieres que suba el footer */
+      margin-top: -150px;
       z-index: 10;
     }
   </style>
@@ -160,9 +158,7 @@
 
 <body>
 
-  <!--==========================
-  Header
-  ============================-->
+  <!-- Header -->
   <header id="header" class="fixed-top">
     <div class="container">
       <div class="logo float-left">
@@ -171,7 +167,6 @@
         </a>
       </div>
 
-      <!-- Menú principal -->
       <nav class="main-nav float-right d-none d-lg-block">
         <ul>
           <li><a href="index.html#intro">Inicio</a></li>
@@ -198,13 +193,11 @@
           </li>
           <li><a href="index.html#contact">Contáctanos</a></li>
         </ul>
-      </nav><!-- .main-nav -->
+      </nav>
     </div>
   </header>
 
-  <!--==========================
-  Sección de Matrícula
-  ============================-->
+  <!-- Sección de Matrícula -->
   <section id="intro" class="d-flex align-items-center">
     <div class="container">
       <!-- IZQUIERDA -->
@@ -218,41 +211,41 @@
           Regístrate y te contactaremos para brindarte toda la información sobre el proceso de admisión.
         </p>
         <div class="card wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-          <form>
+          <form id="matriculaForm">
             <div class="form-row">
               <div class="form-group col-md-12 text-left">
                 <label><i class="fa fa-user"></i> Nombres del apoderado *</label>
-                <input type="text" class="form-control" required>
+                <input type="text" class="form-control" name="nombres" required>
               </div>
 
               <div class="form-group col-md-6 text-left">
                 <label><i class="fa fa-user"></i> Apellido paterno del apoderado*</label>
-                <input type="text" class="form-control" required>
+                <input type="text" class="form-control" name="apellidoP" required>
               </div>
 
               <div class="form-group col-md-6 text-left">
                 <label><i class="fa fa-user"></i> Apellido materno del apoderado*</label>
-                <input type="text" class="form-control" required>
+                <input type="text" class="form-control" name="apellidoM" required>
               </div>
 
               <div class="form-group col-md-6 text-left">
                 <label><i class="fa fa-id-card"></i> DNI / CE del apoderado *</label>
-                <input type="text" class="form-control" required>
+                <input type="text" class="form-control" name="dni" required>
               </div>
 
               <div class="form-group col-md-6 text-left">
                 <label><i class="fa fa-phone"></i> Teléfono *</label>
-                <input type="tel" class="form-control" required>
+                <input type="tel" class="form-control" name="telefono" required>
               </div>
 
               <div class="form-group col-md-12 text-left">
                 <label><i class="fa fa-envelope"></i> Correo electrónico *</label>
-                <input type="email" class="form-control" required>
+                <input type="email" class="form-control" name="email" required>
               </div>
 
               <div class="form-group col-md-6 text-left">
                 <label><i class="fa fa-university"></i> Nivel educativo *</label>
-                <select id="nivel" class="form-control" required>
+                <select id="nivel" class="form-control" name="nivel" required>
                   <option value="">Seleccione el nivel</option>
                   <option value="inicial">Inicial</option>
                   <option value="primaria">Primaria</option>
@@ -262,7 +255,7 @@
 
               <div class="form-group col-md-6 text-left">
                 <label><i class="fa fa-book"></i> Grado *</label>
-                <select id="grado" class="form-control" required>
+                <select id="grado" class="form-control" name="grado" required>
                   <option value="">Seleccione el grado</option>
                 </select>
               </div>
@@ -275,18 +268,15 @@
     </div>
   </section>
 
-  <!--==========================
-  Footer
-  ============================-->
+  <!-- Footer -->
   <footer id="footer">
     <div class="footer-top">
       <div class="container">
         <div class="row">
-
           <div class="col-lg-4 col-md-6 footer-info">
              <a href="#intro" class="scrollto">
-  <img src="img/logo1.png" alt="" class="img-fluid" style="max-width: 160px;">
-</a>
+              <img src="img/logo1.png" alt="" class="img-fluid" style="max-width: 160px;">
+             </a>
             <p>
               Somos una institución educativa comprometida con la formación integral de nuestros estudiantes,
               promoviendo valores, conocimiento y responsabilidad social.
@@ -320,7 +310,6 @@
               <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
               <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
             </div>
-
           </div>
 
           <div class="col-lg-3 col-md-6 footer-newsletter">
@@ -331,7 +320,6 @@
               <input type="submit" value="Suscribirme">
             </form>
           </div>
-
         </div>
       </div>
     </div>
@@ -343,11 +331,9 @@
       <div class="credits">
       </div>
     </div>
-  </footer><!-- #footer -->
+  </footer>
 
-  <!--==========================
-  Scripts
-  ============================-->
+  <!-- Scripts -->
   <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/jquery/jquery-migrate.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -360,14 +346,58 @@
   <script src="lib/isotope/isotope.pkgd.min.js"></script>
   <script src="lib/lightbox/js/lightbox.min.js"></script>
   <script src="contactform/contactform.js"></script>
-
   <script src="js/main.js"></script>
 
-  <script>
-    // Script dinámico de grados según nivel
-    const nivelSelect = document.getElementById('nivel');
+  <!-- Firebase + Formulario -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBy90TiNqiM71I5CEwBZSBIVw3D0ruh648",
+      authDomain: "colegio-peruano-europeo.firebaseapp.com",
+      projectId: "colegio-peruano-europeo",
+      storageBucket: "colegio-peruano-europeo.firebasestorage.app",
+      messagingSenderId: "657920121015",
+      appId: "1:657920121015:web:072fc45325209862d81532",
+      measurementId: "G-BLVHVLLSLH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('matriculaForm');
     const gradoSelect = document.getElementById('grado');
 
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        nombres: form.nombres.value,
+        apellidoP: form.apellidoP.value,
+        apellidoM: form.apellidoM.value,
+        dni: form.dni.value,
+        telefono: form.telefono.value,
+        email: form.email.value,
+        nivel: form.nivel.value,
+        grado: form.grado.value,
+        fecha: serverTimestamp()
+      };
+
+      try {
+        await addDoc(collection(db, "matriculas"), data);
+        alert("¡Registro guardado correctamente!");
+        form.reset();
+        gradoSelect.innerHTML = '<option value="">Seleccione el grado</option>';
+      } catch (error) {
+        console.error("Error al guardar: ", error);
+        alert("Ocurrió un error al guardar el registro.");
+      }
+    });
+
+    const nivelSelect = document.getElementById('nivel');
     const opciones = {
       inicial: ['3 años', '4 años', '5 años'],
       primaria: ['1° Grado', '2° Grado', '3° Grado', '4° Grado', '5° Grado', '6° Grado'],

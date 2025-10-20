@@ -2,169 +2,304 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard - Matricula 2026</title>
+  <title>Intranet - Matrículas 2026</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Montserrat:400,500,700" rel="stylesheet">
 
   <!-- Bootstrap CSS -->
   <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
   <link href="css/style.css" rel="stylesheet">
 
   <style>
     body {
       font-family: 'Open Sans', sans-serif;
-      background-color: #f5f8fa;
+      background-color: #f4f6f8;
     }
 
-    .header-dashboard {
-      background: linear-gradient(135deg, #007bff, #0056b3);
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
+    .motivacion {
+      color: #fff;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
     }
 
-    .card-dashboard {
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    .card {
+      background-color: rgba(255,255,255,0.98);
+      border-radius: 15px;
+      border: none;
+      padding: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
       margin-bottom: 20px;
     }
 
-    .card-dashboard:hover {
+    .card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
 
-    .section-title {
+    .btn-refresh {
+      background: linear-gradient(135deg, #28a745, #218838);
+      color: white;
+      font-weight: 500;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+    }
+
+    /* TABLA PARA ESCRITORIO */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      word-wrap: break-word;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 0.6rem;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.85rem;
+    }
+
+    th {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: #fff;
       font-weight: 600;
-      color: #054890;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
     }
 
-    .table-responsive {
-      overflow-x: auto;
-    }
-
-    .btn-logout {
-      background: #dc3545;
-      color: #fff;
-      border-radius: 10px;
-      padding: 8px 15px;
-      transition: 0.3s;
-    }
-
-    .btn-logout:hover {
-      background: #c82333;
-      color: #fff;
-    }
-
+    /* RESPONSIVE MÓVIL: tarjetas verticales */
     @media (max-width: 768px) {
-      .dashboard-grid {
-        flex-direction: column;
+
+      table {
+        display: none; /* ocultamos la tabla en móviles */
       }
+
+      #cardContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .mobile-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 12px 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.9rem;
+      }
+
+      .mobile-card span {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .mobile-card span label {
+        font-weight: 600;
+        color: #007bff;
+      }
+
+      .motivacion {
+        font-size: 1rem;
+      }
+
+      .logo img {
+        max-width: 100px;
+      }
+
+      #footer .footer-info p {
+        font-size: 0.8rem;
+      }
+    }
+
+    /* Footer */
+    #footer {
+      position: relative;
+      margin-top: -40px;
+      z-index: 10;
+      background: #0056b3;
+      color: #fff;
+      padding: 20px 0;
+    }
+
+    #footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    #footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
-
 <body>
-  <div class="container mt-4">
-    <!-- Header -->
-    <div class="header-dashboard text-center">
-      <h2>Dashboard - Matricula 2026</h2>
-      <p>Bienvenido al panel de control de estudiantes registrados</p>
+
+  <!-- Header -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="logo">
+        <a href="#intro" class="scrollto">
+          <img src="img/logo.png" alt="" class="img-fluid">
+        </a>
+      </div>
+
+      <nav class="main-nav d-none d-lg-block">
+        <ul class="list-unstyled d-flex mb-0">
+          <li class="me-3"><a href="index.html#intro">Inicio</a></li>
+          <li class="me-3"><a href="index.html#about">Nosotros</a></li>
+          <li class="me-3"><a href="index.html#niveles">Niveles</a></li>
+          <li class="me-3"><a href="index.html#why-us">Actividades</a></li>
+          <li class="me-3"><a href="index.html#team">Docentes</a></li>
+          <li><a href="index.html#contact">Contáctanos</a></li>
+        </ul>
+      </nav>
     </div>
+  </header>
 
-    <!-- Dashboard grid -->
-    <div class="d-flex flex-wrap dashboard-grid gap-3">
-
-      <!-- Resumen de matriculados -->
-      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
-        <div class="section-title">Resumen de Matriculados</div>
+  <!-- Sección Intranet -->
+  <section id="intro" class="d-flex align-items-center" style="padding-top:120px; padding-bottom:80px;">
+    <div class="container">
+      <p class="motivacion">
+        Visualiza todos los registros de matrícula 2026 en tiempo real.
+      </p>
+      <div class="card wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+        <div class="text-end mb-3">
+          <button id="refreshBtn" class="btn btn-refresh"><i class="fa fa-refresh"></i> Actualizar Datos</button>
+        </div>
+        <!-- Tabla escritorio -->
         <div class="table-responsive">
-          <table class="table table-bordered">
+          <table class="table table-striped" id="matriculaTable">
             <thead>
               <tr>
-                <th>Nombre</th>
+                <th>#</th>
+                <th>Nombres</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>DNI/CE</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Nivel</th>
                 <th>Grado</th>
               </tr>
             </thead>
-            <tbody id="tablaMatricula"></tbody>
+            <tbody>
+              <!-- Datos se llenan con JS -->
+            </tbody>
           </table>
         </div>
-      </div>
 
-      <!-- Estadísticas -->
-      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
-        <div class="section-title">Estadísticas</div>
-        <ul class="list-unstyled">
-          <li><strong>Total de estudiantes:</strong> <span id="totalEstudiantes">0</span></li>
-          <li><strong>Inicial:</strong> <span id="totalInicial">0</span></li>
-          <li><strong>Primaria:</strong> <span id="totalPrimaria">0</span></li>
-          <li><strong>Secundaria:</strong> <span id="totalSecundaria">0</span></li>
-        </ul>
+        <!-- Contenedor tarjetas móviles -->
+        <div id="cardContainer"></div>
       </div>
-
-      <!-- Accesos rápidos -->
-      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
-        <div class="section-title">Accesos Rápidos</div>
-        <div class="d-flex flex-column gap-2">
-          <a href="#" class="btn btn-primary">Registrar Nuevo Estudiante</a>
-          <a href="#" class="btn btn-warning">Actualizar Información</a>
-          <a href="#" class="btn btn-info">Enviar Mensajes</a>
-          <a href="index.html" class="btn btn-logout">Cerrar Sesión</a>
-        </div>
-      </div>
-
-      <!-- Mensajes recientes -->
-      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
-        <div class="section-title">Mensajes Recientes</div>
-        <ul class="list-group" id="mensajesRecientes">
-          <li class="list-group-item">No hay mensajes recientes</li>
-        </ul>
-      </div>
-
     </div>
-  </div>
+  </section>
 
-  <script>
-    const matricula = JSON.parse(sessionStorage.getItem("matricula2026")) || [];
-    const tbody = document.getElementById("tablaMatricula");
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container text-center">
+      <div class="footer-info">
+        <a href="#intro" class="scrollto">
+          <img src="img/logo1.png" alt="" class="img-fluid" style="max-width: 140px;">
+        </a>
+        <p class="mt-2">
+          Somos una institución educativa comprometida con la formación integral de nuestros estudiantes,
+          promoviendo valores, conocimiento y responsabilidad social.
+        </p>
+      </div>
+    </div>
+  </footer>
 
-    // Variables de conteo
-    let totalInicial = 0, totalPrimaria = 0, totalSecundaria = 0;
+  <!-- Scripts -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/lightbox/js/lightbox.min.js"></script>
+  <script src="js/main.js"></script>
 
-    matricula.forEach(alumno => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${alumno.nombre}</td><td>${alumno.grado}</td>`;
-      tbody.appendChild(tr);
+  <!-- Firebase JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-      // Contar según nivel
-      if (alumno.grado.includes('años')) totalInicial++;
-      else if (['1° Grado','2° Grado','3° Grado','4° Grado','5° Grado','6° Grado'].includes(alumno.grado)) {
-        if (['1° Grado','2° Grado','3° Grado','4° Grado','5° Grado','6° Grado'].indexOf(alumno.grado) < 6) totalPrimaria++;
-      }
-    });
+    const firebaseConfig = {
+      apiKey: "AIzaSyBy90TiNqiM71I5CEwBZSBIVw3D0ruh648",
+      authDomain: "colegio-peruano-europeo.firebaseapp.com",
+      projectId: "colegio-peruano-europeo",
+      storageBucket: "colegio-peruano-europeo.appspot.com",
+      messagingSenderId: "657920121015",
+      appId: "1:657920121015:web:072fc45325209862d81532"
+    };
 
-    // Actualizar estadísticas
-    document.getElementById("totalEstudiantes").textContent = matricula.length;
-    document.getElementById("totalInicial").textContent = totalInicial;
-    document.getElementById("totalPrimaria").textContent = totalPrimaria;
-    document.getElementById("totalSecundaria").textContent = totalSecundaria;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    // Mensajes de prueba
-    const mensajes = ["Bienvenido al sistema", "Recuerda actualizar los datos de contacto", "El cierre de matrícula es el 31 de marzo"];
-    const mensajesUl = document.getElementById("mensajesRecientes");
-    mensajesUl.innerHTML = "";
-    mensajes.forEach(msg => {
-      const li = document.createElement("li");
-      li.className = "list-group-item";
-      li.textContent = msg;
-      mensajesUl.appendChild(li);
-    });
+    const tableBody = document.querySelector("#matriculaTable tbody");
+    const cardContainer = document.getElementById("cardContainer");
+
+    async function cargarDatos() {
+      tableBody.innerHTML = "";
+      cardContainer.innerHTML = "";
+      const snapshot = await getDocs(collection(db, "matriculas"));
+      let index = 1;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+
+        // Fila tabla escritorio
+        const row = `
+          <tr>
+            <td data-label="#">${index}</td>
+            <td data-label="Nombres">${data.nombres || ''}</td>
+            <td data-label="Apellido P">${data.apellidoP || ''}</td>
+            <td data-label="Apellido M">${data.apellidoM || ''}</td>
+            <td data-label="DNI/CE">${data.dni || ''}</td>
+            <td data-label="Teléfono">${data.telefono || ''}</td>
+            <td data-label="Email">${data.email || ''}</td>
+            <td data-label="Nivel">${data.nivel || ''}</td>
+            <td data-label="Grado">${data.grado || ''}</td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+
+        // Tarjeta móvil
+        const mobileCard = document.createElement("div");
+        mobileCard.className = "mobile-card";
+        mobileCard.innerHTML = `
+          <span><label>#</label> <span>${index}</span></span>
+          <span><label>Nombres</label> <span>${data.nombres || ''}</span></span>
+          <span><label>Apellido P</label> <span>${data.apellidoP || ''}</span></span>
+          <span><label>Apellido M</label> <span>${data.apellidoM || ''}</span></span>
+          <span><label>DNI/CE</label> <span>${data.dni || ''}</span></span>
+          <span><label>Teléfono</label> <span>${data.telefono || ''}</span></span>
+          <span><label>Email</label> <span>${data.email || ''}</span></span>
+          <span><label>Nivel</label> <span>${data.nivel || ''}</span></span>
+          <span><label>Grado</label> <span>${data.grado || ''}</span></span>
+        `;
+        cardContainer.appendChild(mobileCard);
+
+        index++;
+      });
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", cargarDatos);
+    cargarDatos();
   </script>
+
 </body>
 </html>
