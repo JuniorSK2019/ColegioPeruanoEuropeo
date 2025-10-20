@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard - Matricula 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f5f8fa;
+    }
+
+    .header-dashboard {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .card-dashboard {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .card-dashboard:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: #054890;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .btn-logout {
+      background: #dc3545;
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 15px;
+      transition: 0.3s;
+    }
+
+    .btn-logout:hover {
+      background: #c82333;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <!-- Header -->
+    <div class="header-dashboard text-center">
+      <h2>Dashboard - Matricula 2026</h2>
+      <p>Bienvenido al panel de control de estudiantes registrados</p>
+    </div>
+
+    <!-- Dashboard grid -->
+    <div class="d-flex flex-wrap dashboard-grid gap-3">
+
+      <!-- Resumen de matriculados -->
+      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
+        <div class="section-title">Resumen de Matriculados</div>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Grado</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMatricula"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Estadísticas -->
+      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
+        <div class="section-title">Estadísticas</div>
+        <ul class="list-unstyled">
+          <li><strong>Total de estudiantes:</strong> <span id="totalEstudiantes">0</span></li>
+          <li><strong>Inicial:</strong> <span id="totalInicial">0</span></li>
+          <li><strong>Primaria:</strong> <span id="totalPrimaria">0</span></li>
+          <li><strong>Secundaria:</strong> <span id="totalSecundaria">0</span></li>
+        </ul>
+      </div>
+
+      <!-- Accesos rápidos -->
+      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
+        <div class="section-title">Accesos Rápidos</div>
+        <div class="d-flex flex-column gap-2">
+          <a href="#" class="btn btn-primary">Registrar Nuevo Estudiante</a>
+          <a href="#" class="btn btn-warning">Actualizar Información</a>
+          <a href="#" class="btn btn-info">Enviar Mensajes</a>
+          <a href="index.html" class="btn btn-logout">Cerrar Sesión</a>
+        </div>
+      </div>
+
+      <!-- Mensajes recientes -->
+      <div class="card-dashboard flex-fill" style="min-width: 300px; max-width: 48%;">
+        <div class="section-title">Mensajes Recientes</div>
+        <ul class="list-group" id="mensajesRecientes">
+          <li class="list-group-item">No hay mensajes recientes</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const matricula = JSON.parse(sessionStorage.getItem("matricula2026")) || [];
+    const tbody = document.getElementById("tablaMatricula");
+
+    // Variables de conteo
+    let totalInicial = 0, totalPrimaria = 0, totalSecundaria = 0;
+
+    matricula.forEach(alumno => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${alumno.nombre}</td><td>${alumno.grado}</td>`;
+      tbody.appendChild(tr);
+
+      // Contar según nivel
+      if (alumno.grado.includes('años')) totalInicial++;
+      else if (['1° Grado','2° Grado','3° Grado','4° Grado','5° Grado','6° Grado'].includes(alumno.grado)) {
+        if (['1° Grado','2° Grado','3° Grado','4° Grado','5° Grado','6° Grado'].indexOf(alumno.grado) < 6) totalPrimaria++;
+      }
+    });
+
+    // Actualizar estadísticas
+    document.getElementById("totalEstudiantes").textContent = matricula.length;
+    document.getElementById("totalInicial").textContent = totalInicial;
+    document.getElementById("totalPrimaria").textContent = totalPrimaria;
+    document.getElementById("totalSecundaria").textContent = totalSecundaria;
+
+    // Mensajes de prueba
+    const mensajes = ["Bienvenido al sistema", "Recuerda actualizar los datos de contacto", "El cierre de matrícula es el 31 de marzo"];
+    const mensajesUl = document.getElementById("mensajesRecientes");
+    mensajesUl.innerHTML = "";
+    mensajes.forEach(msg => {
+      const li = document.createElement("li");
+      li.className = "list-group-item";
+      li.textContent = msg;
+      mensajesUl.appendChild(li);
+    });
+  </script>
+</body>
+</html>
