@@ -58,30 +58,68 @@
       font-weight: 500;
       padding: 6px 12px;
       font-size: 0.9rem;
+      border: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
     }
 
-    /* TABLA PARA ESCRITORIO */
+    .btn-refresh:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    }
+
+    /* TABLA MEJORADA PARA ESCRITORIO */
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
       word-wrap: break-word;
+      margin-bottom: 0;
     }
 
     th, td {
       text-align: center;
-      padding: 0.6rem;
-      border-bottom: 1px solid #ddd;
+      padding: 0.8rem;
+      border-bottom: 1px solid #e9ecef;
       font-size: 0.85rem;
+      transition: background-color 0.2s ease;
     }
 
     th {
       background: linear-gradient(135deg, #007bff, #0056b3);
       color: #fff;
       font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
-    /* RESPONSIVE MÓVIL: tarjetas verticales */
+    tbody tr {
+      transition: all 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background-color: #f8f9fa;
+      transform: scale(1.005);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Estilo para filas alternadas */
+    tbody tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    tbody tr:nth-child(even):hover {
+      background-color: #e9ecef;
+    }
+
+    /* RESPONSIVE MÓVIL: tarjetas verticales mejoradas */
     @media (max-width: 768px) {
 
       table {
@@ -91,28 +129,50 @@
       #cardContainer {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 15px;
       }
 
       .mobile-card {
         background: #ffffff;
         border-radius: 12px;
-        padding: 12px 15px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.08);
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 8px;
         font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid #007bff;
+      }
+
+      .mobile-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       }
 
       .mobile-card span {
         display: flex;
         justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px solid #f1f3f4;
+      }
+
+      .mobile-card span:last-child {
+        border-bottom: none;
       }
 
       .mobile-card span label {
         font-weight: 600;
         color: #007bff;
+        flex: 1;
+      }
+
+      .mobile-card span span {
+        flex: 2;
+        text-align: right;
+        color: #495057;
+        border-bottom: none;
+        padding: 0;
       }
 
       .motivacion {
@@ -145,6 +205,24 @@
 
     #footer a:hover {
       text-decoration: underline;
+    }
+
+    /* Estado vacío */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #dee2e6;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      margin: 0;
     }
   </style>
 </head>
@@ -179,12 +257,14 @@
         Visualiza todos los registros de matrícula 2026 en tiempo real.
       </p>
       <div class="card wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-        <div class="text-end mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0 text-primary">Registros de Matrícula</h5>
           <button id="refreshBtn" class="btn btn-refresh"><i class="fa fa-refresh"></i> Actualizar Datos</button>
         </div>
+        
         <!-- Tabla escritorio -->
         <div class="table-responsive">
-          <table class="table table-striped" id="matriculaTable">
+          <table class="table" id="matriculaTable">
             <thead>
               <tr>
                 <th>#</th>
@@ -206,6 +286,12 @@
 
         <!-- Contenedor tarjetas móviles -->
         <div id="cardContainer"></div>
+        
+        <!-- Estado vacío (se muestra cuando no hay datos) -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <i class="fa fa-database"></i>
+          <p>No hay registros de matrícula disponibles</p>
+        </div>
       </div>
     </div>
   </section>
@@ -252,49 +338,69 @@
 
     const tableBody = document.querySelector("#matriculaTable tbody");
     const cardContainer = document.getElementById("cardContainer");
+    const emptyState = document.getElementById("emptyState");
 
     async function cargarDatos() {
       tableBody.innerHTML = "";
       cardContainer.innerHTML = "";
-      const snapshot = await getDocs(collection(db, "matriculas"));
-      let index = 1;
-      snapshot.forEach(doc => {
-        const data = doc.data();
+      
+      // Mostrar estado de carga
+      emptyState.style.display = "none";
+      tableBody.innerHTML = '<tr><td colspan="9" class="text-center py-4"><i class="fa fa-spinner fa-spin"></i> Cargando datos...</td></tr>';
+      
+      try {
+        const snapshot = await getDocs(collection(db, "matriculas"));
+        
+        if (snapshot.empty) {
+          // Mostrar estado vacío
+          tableBody.innerHTML = "";
+          emptyState.style.display = "block";
+          return;
+        }
+        
+        emptyState.style.display = "none";
+        let index = 1;
+        snapshot.forEach(doc => {
+          const data = doc.data();
 
-        // Fila tabla escritorio
-        const row = `
-          <tr>
-            <td data-label="#">${index}</td>
-            <td data-label="Nombres">${data.nombres || ''}</td>
-            <td data-label="Apellido P">${data.apellidoP || ''}</td>
-            <td data-label="Apellido M">${data.apellidoM || ''}</td>
-            <td data-label="DNI/CE">${data.dni || ''}</td>
-            <td data-label="Teléfono">${data.telefono || ''}</td>
-            <td data-label="Email">${data.email || ''}</td>
-            <td data-label="Nivel">${data.nivel || ''}</td>
-            <td data-label="Grado">${data.grado || ''}</td>
-          </tr>
-        `;
-        tableBody.innerHTML += row;
+          // Fila tabla escritorio
+          const row = `
+            <tr>
+              <td data-label="#">${index}</td>
+              <td data-label="Nombres">${data.nombres || ''}</td>
+              <td data-label="Apellido P">${data.apellidoP || ''}</td>
+              <td data-label="Apellido M">${data.apellidoM || ''}</td>
+              <td data-label="DNI/CE">${data.dni || ''}</td>
+              <td data-label="Teléfono">${data.telefono || ''}</td>
+              <td data-label="Email">${data.email || ''}</td>
+              <td data-label="Nivel">${data.nivel || ''}</td>
+              <td data-label="Grado">${data.grado || ''}</td>
+            </tr>
+          `;
+          tableBody.innerHTML += row;
 
-        // Tarjeta móvil
-        const mobileCard = document.createElement("div");
-        mobileCard.className = "mobile-card";
-        mobileCard.innerHTML = `
-          <span><label>#</label> <span>${index}</span></span>
-          <span><label>Nombres</label> <span>${data.nombres || ''}</span></span>
-          <span><label>Apellido P</label> <span>${data.apellidoP || ''}</span></span>
-          <span><label>Apellido M</label> <span>${data.apellidoM || ''}</span></span>
-          <span><label>DNI/CE</label> <span>${data.dni || ''}</span></span>
-          <span><label>Teléfono</label> <span>${data.telefono || ''}</span></span>
-          <span><label>Email</label> <span>${data.email || ''}</span></span>
-          <span><label>Nivel</label> <span>${data.nivel || ''}</span></span>
-          <span><label>Grado</label> <span>${data.grado || ''}</span></span>
-        `;
-        cardContainer.appendChild(mobileCard);
+          // Tarjeta móvil
+          const mobileCard = document.createElement("div");
+          mobileCard.className = "mobile-card";
+          mobileCard.innerHTML = `
+            <span><label>#</label> <span>${index}</span></span>
+            <span><label>Nombres</label> <span>${data.nombres || ''}</span></span>
+            <span><label>Apellido Paterno</label> <span>${data.apellidoP || ''}</span></span>
+            <span><label>Apellido Materno</label> <span>${data.apellidoM || ''}</span></span>
+            <span><label>DNI/CE</label> <span>${data.dni || ''}</span></span>
+            <span><label>Teléfono</label> <span>${data.telefono || ''}</span></span>
+            <span><label>Email</label> <span>${data.email || ''}</span></span>
+            <span><label>Nivel</label> <span>${data.nivel || ''}</span></span>
+            <span><label>Grado</label> <span>${data.grado || ''}</span></span>
+          `;
+          cardContainer.appendChild(mobileCard);
 
-        index++;
-      });
+          index++;
+        });
+      } catch (error) {
+        console.error("Error al cargar datos:", error);
+        tableBody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-danger"><i class="fa fa-exclamation-triangle"></i> Error al cargar los datos</td></tr>';
+      }
     }
 
     document.getElementById("refreshBtn").addEventListener("click", cargarDatos);
